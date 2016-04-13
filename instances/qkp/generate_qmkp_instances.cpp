@@ -45,7 +45,6 @@ int main() {
                 char instance_output[100] = "../jeu";
                 get_intance_file_name(instance_input, instance_output, n, d, i);
 
-                string instance_name;
                 ifstream inputFile (instance_input);
                 ofstream outputFile (instance_output);
                 if(inputFile.is_open() && outputFile.is_open()) {
@@ -69,6 +68,7 @@ int main() {
                         sum += weights[j];
                     }
 
+                    outputFile << k << endl;
                     outputFile << (int)(sum*0.8/k);
                     for(int j = 1; j < k; j++) {
                         outputFile << " " << (int)(sum*0.8/k);
