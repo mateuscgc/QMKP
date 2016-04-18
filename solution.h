@@ -1,42 +1,34 @@
 #ifndef SOLUTION
 #define SOLUTION
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <utility>
+#include <set>
+#include <algorithm>
+
+#include "input.h"
+#include "output.h"
+#include "pair_sorter.h"
+#include "item_sorter.h"
+
+using namespace std;
 
 class Solution : public Output {
 public:
 
-    Solution(const Input pin);
+    Solution(const Input* pin);
 
-    int add_item(int item, int knap);
-    int add_pair(int par);
-    void construct_phase();
     void solve();
+    void construct_phase();
+    int add_item(int item, int knap);
+    void add_pair(pair<int, int> par);
 
-    struct PairComp { // Define prioridade dos pares de itens
-        bool operator()(pair a, pair b) {
-            double a_denst = in->i_values[a.first] + in->i_values[a.second] + in->p_values[a.first][a.second];
-            a_denst /= (in->i_weights[a.first]+in->i_weights[a.second]);
-            double b_denst = in->i_values[b.first] + in->i_values[b.second] + in->p_values[b.first][b.second];
-            b_denst /= (in->i_weights[b.first]+in->i_weights[b.second]);
-            return a_denst > b_denst;
-        }
-    };
-
-    struct ItemComp { // Define prioridade dos itens
-        bool operator()(int a, int b) {
-            double a_denst = in->i_values[a]/in->i_weights[a];
-            double b_denst = in->i_values[b]/in->i_weights[b];
-            if(a_denst == b_denst)
-                return in->i_values[a] > in->i_values[b];
-            return a_denst > b_denst;
-        }
-    };
-
-    set<pair<int, int>, PairComp> p_list;
+    vector< pair<int, int> > p_list;
+    vector<int> i_list;
     vector<int> k_curr_caps;
     vector<int> i_knap;
-    set<int, ItemComp> i_desc;
 };
 
 #endif

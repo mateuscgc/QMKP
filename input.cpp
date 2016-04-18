@@ -30,16 +30,18 @@ void Input::load(const string& file_name) {
         }
 
         getline(inputFile, line);
+        inputFile >> k;
 
 
         // Leitura da quantidade de mochilas
         inputFile >> k;
         k_caps.resize(k, 0);
-        for(ini i = 0; i < k; i++) {
+        for(int i = 0; i < k; i++) {
             inputFile >> k_caps[i];
         }
 
         // Leitura dos pesos dos itens
+        i_weights.resize(n, 0);
         for(int i = 0; i < n; i++) {
             inputFile >> i_weights[i];
         }

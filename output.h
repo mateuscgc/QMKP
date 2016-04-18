@@ -1,7 +1,11 @@
 #ifndef OUTPUT
 #define OUTPUT
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <set>
+#include "input.h"
 
 using namespace std;
 
@@ -9,7 +13,7 @@ class Output {
 public:
     Output(const Input* pin);
 
-    const Input* in;
+    const Input *in;
 
     vector<int> k_values;
 

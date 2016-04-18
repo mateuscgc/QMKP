@@ -4,10 +4,10 @@
 #
 
 MAKEFILE = Makefile
-SOURCES = input.cpp output.cpp solution.cpp main.cpp
-OBJECTS = input.o output.o solution.o main.o
-BINARIES = hcp
-INCLUDES = input.h output.h solution.h
+SOURCES = input.cpp output.cpp solution.cpp pair_sorter.cpp item_sorter.cpp main.cpp
+OBJECTS = input.o output.o solution.o pair_sorter.o item_sorter.o main.o
+BINARIES = qmkp
+INCLUDES = input.h output.h solution.h pair_sorter.h item_sorter.h
 
 
 CC = g++ -std=c++11
@@ -17,15 +17,15 @@ LFLAGS = -lm # -g -lm -pg
 make: $(BINARIES)
 
 $(OBJECTS):
-    $(CC) -c $(SOURCES) $(INCLUDES)
+	$(CC) -c $(SOURCES) $(INCLUDES)
 
-all:    $(BINARIES)
+all: $(BINARIES)
 
-hcp:    $(OBJECTS)
-        $(CC) -o $@ $(OBJECTS) $(LFLAGS)
+qmkp: $(OBJECTS)
+	$(CC) -o $@ $(OBJECTS) $(LFLAGS)
 
 lint:
-    lint -h $(SOURCES)
+	lint -h $(SOURCES)
 
 clean:
-    rm -f core *.o a.out $(BINARIES)
+	rm -f core *.o *.gch a.out $(BINARIES)

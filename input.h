@@ -1,6 +1,13 @@
 #ifndef INPUT
 #define INPUT
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <utility>
+#include <set>
+#include <fstream>
+
+using namespace std;
 
 class Input {
 

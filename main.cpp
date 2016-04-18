@@ -1,11 +1,13 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <cstring>
 #include "input.h"
 #include "output.h"
 #include "solution.h"
 
 using namespace std;
 
-void get_intance_file_name(char *in, int n, int d, int i) {
+void get_intance_file_name(char *in, int n, int d, int k, int i) {
     string aux = to_string(n);
     strcat(in, "_");
     strcat(in, aux.c_str());
@@ -31,18 +33,12 @@ int main() {
     for(int n = 100; n <= 200; n += 100) {
         for(int d = 25; d <= 75; d += 50) {
             for(int i = 1; i <= 5; i++) {
-                char instance_file_name[100] = "jeu";
-                get_intance_file_name(instance_file_name, n, d, i);
+                // char instance_file_name[100] = "instances/jeu_100_25_10_1.txt";
+                char instance_file_name[100] = "instances/jeu";
+                get_intance_file_name(instance_file_name, n, d, 3, i);
 
                 Input in;
                 in.load(instance_file_name);
-
-                // for(int l = 0; l < in.n-1; l++) {
-                //     for(int j = l+1; j < in.n; j++) {
-                //         cout << in.p_values[l][j] << " ";
-                //     }
-                //     cout << endl;
-                // }
 
                 Solution s(&in);
                 s.solve();
