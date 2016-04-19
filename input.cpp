@@ -1,4 +1,4 @@
-#include "input.h"
+#include "input.hpp"
 
 Input::Input() {
     n = 0;
@@ -21,7 +21,7 @@ void Input::load(const string& file_name) {
         }
 
         // Leitura dos valores dos pares
-        p_values.resize(n, vector<int>(n));
+        p_values.resize(n, vector<int>(n, 0));
         for(int i = 0; i < n-1; i++) {
             for(int j = i+1; j < n; j++) {
                 inputFile >> p_values[i][j];
@@ -31,7 +31,6 @@ void Input::load(const string& file_name) {
 
         getline(inputFile, line);
         inputFile >> k;
-
 
         // Leitura da quantidade de mochilas
         inputFile >> k;

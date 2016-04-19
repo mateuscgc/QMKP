@@ -1,4 +1,4 @@
-#include "pair_sorter.h"
+#include "pair_sorter.hpp"
 
 using namespace std;
 

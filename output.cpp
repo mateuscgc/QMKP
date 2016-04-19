@@ -1,4 +1,4 @@
-#include "output.h"
+#include "output.hpp"
 
 Output::Output(const Input* pin):in(pin) {
     k_values.resize(in->k, 0);

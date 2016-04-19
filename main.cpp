@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
 #include <cstring>
-#include "input.h"
-#include "output.h"
-#include "solution.h"
+#include "input.hpp"
+#include "output.hpp"
+#include "solution.hpp"
 
 using namespace std;
 

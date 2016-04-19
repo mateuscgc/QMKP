@@ -8,10 +8,9 @@
 #include <set>
 #include <algorithm>
 
-#include "input.h"
-#include "output.h"
-#include "pair_sorter.h"
-#include "item_sorter.h"
+#include "input.hpp"
+#include "output.hpp"
+#include "pair_sorter.hpp"
 
 using namespace std;
 

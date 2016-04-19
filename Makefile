@@ -4,10 +4,10 @@
 #
 
 MAKEFILE = Makefile
-SOURCES = input.cpp output.cpp solution.cpp pair_sorter.cpp item_sorter.cpp main.cpp
-OBJECTS = input.o output.o solution.o pair_sorter.o item_sorter.o main.o
+SOURCES = input.cpp output.cpp solution.cpp pair_sorter.cpp main.cpp
+OBJECTS = input.o output.o solution.o pair_sorter.o main.o
 BINARIES = qmkp
-INCLUDES = input.h output.h solution.h pair_sorter.h item_sorter.h
+INCLUDES = input.hpp output.hpp solution.hpp pair_sorter.hpp
 
 
 CC = g++ -std=c++11

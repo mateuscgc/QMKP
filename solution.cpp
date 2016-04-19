@@ -1,4 +1,4 @@
-#include "solution.h"
+#include "solution.hpp"
 
 Solution::Solution(const Input* pin):Output(pin) {
     k_curr_caps.resize(in->k, 0);
@@ -41,8 +41,8 @@ void Solution::add_pair(pair<int, int> par) {
 void Solution::construct_phase() {
     // Construção de lista de pares não zeros
     for(int i = 0; i < in->n; i++) {
-        for(int j = i+1; j < in->n; j++) {
-            if(in->p_values[i][j] > 0)
+        for(int j = i; j < in->n; j++) {
+            if(in->p_values[i][j] > 0 || i == j)
                 p_list.push_back({i, j});
         }
     }
@@ -56,30 +56,6 @@ void Solution::construct_phase() {
         add_pair(next);
     }
 
-    // Construção da lista de itens que ainda não foram adicionados
-    for(int i = 0; i < in->n; i++)
-        if(i_knap[i] == -1 && in->i_values[i] > 0)
-            i_list.push_back(i);
-    ItemSorter i_sorter(in);
-    sort(i_list.begin(), i_list.end(), i_sorter);
-
-    // for(int i = 0; i < in->k; i++) {
-        // cout << k_curr_caps[i] << endl;
-    // }
-    for(int x : i_list) { // Preenche mochilas com os itens restantes
-        // cout << x << " -> " << in->i_weights[x] << endl;
-        for(int i = 0; i < in->k; i++) {
-            if(add_item(x, i)) {
-                // cout << "Added" << endl;
-                break;
-            }
-        }
-    }
-
-    // for(int i = 0; i < in->n; i++) {
-        // cout << i_knap[i] << " ";
-    // }
-    // cout << endl;
 }
 
 void Solution::solve() {
