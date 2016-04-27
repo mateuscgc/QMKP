@@ -7,6 +7,7 @@
 #include <utility>
 #include <set>
 #include <algorithm>
+#include <queue>
 
 #include "input.hpp"
 #include "output.hpp"
@@ -21,10 +22,11 @@ public:
 
     void solve();
     void construct_phase();
+    void update_pq(int k);
     int add_item(int item, int knap);
-    void add_pair(pair<int, int> par);
+    void add_pair(int a, int b, int k, int profit);
 
-    vector< pair<int, int> > p_list;
+    priority_queue<PairSorter> p_list;
     vector<int> i_list;
     vector<int> k_curr_caps;
     vector<int> i_knap;

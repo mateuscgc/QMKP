@@ -13,11 +13,17 @@ using namespace std;
 
 class PairSorter {
 public:
-    PairSorter(const Input* pin);
+    PairSorter();
+    PairSorter(const Input* pin, int a, int b, int k, const vector<int>& i_knap);
 
-    bool operator()(pair<int, int> lhs, pair<int, int> rhs);
+    bool operator<(const PairSorter& rhs) const;
 
-    const Input *in;
+    int a;
+    int b;
+    int k;
+
+    int profit;
+    double dnst;
 };
 
 #endif
