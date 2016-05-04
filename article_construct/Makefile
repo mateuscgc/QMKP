@@ -4,10 +4,10 @@
 #
 
 MAKEFILE = Makefile
-SOURCES = input.cpp output.cpp solution.cpp pair_sorter.cpp main.cpp
-OBJECTS = input.o output.o solution.o pair_sorter.o main.o
-BINARIES = qmkp
-INCLUDES = input.hpp output.hpp solution.hpp pair_sorter.hpp
+SOURCES = ../input.cpp main.cpp
+OBJECTS = ../input.o main.o
+BINARIES = qmkp_article
+INCLUDES = ../input.hpp
 
 
 CC = g++ -std=c++11
@@ -21,7 +21,7 @@ $(OBJECTS):
 
 all: $(BINARIES)
 
-qmkp: $(OBJECTS)
+qmkp_article: $(OBJECTS)
 	$(CC) -o $@ $(OBJECTS) $(LFLAGS)
 
 lint:

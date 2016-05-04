@@ -1,4 +1,4 @@
-#include "output.h"
+#include "output.hpp"
 
 Output::Output(const Input* pin):in(pin) {
     k_values.resize(in->k, 0);
@@ -8,10 +8,10 @@ Output::Output(const Input* pin):in(pin) {
 ostream& operator<<(ostream& os, const Output& out) {
     long long sum = 0;
     for(int i = 0; i < out.in->k; i++) {
-        os << out.k_values[i] << endl;
+        // os << out.k_values[i] << endl;
         sum += out.k_values[i];
     }
-    os << sum << endl;
+    os << sum;
 
   return os;
 }

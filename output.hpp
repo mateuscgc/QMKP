@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <set>
-#include "input.h"
+#include "input.hpp"
 
 using namespace std;
 

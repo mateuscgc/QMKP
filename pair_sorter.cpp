@@ -1,15 +1,33 @@
-#include "pair_sorter.h"
+#include "pair_sorter.hpp"
 
 using namespace std;
 
-PairSorter::PairSorter(const Input* pin) : in(pin) {}
+PairSorter::PairSorter() {
+    this->a = 0; // item
+    this->b = 0; // item
+    this->k = 0; // mochila
+}
 
-bool PairSorter::operator()(pair<int, int> lhs, pair<int, int> rhs){
-    double lhs_denst = in->i_values[lhs.first] + in->i_values[lhs.second] + in->p_values[lhs.first][lhs.second];
-    lhs_denst /= (in->i_weights[lhs.first]+in->i_weights[lhs.second]);
+PairSorter::PairSorter(const Input* pin, int a, int b, int k, const vector<int>& i_knap) {
+    this->a = a; // item
+    this->b = b; // item
+    this->k = k; // mochila
 
-    double rhs_denst = in->i_values[rhs.first] + in->i_values[rhs.second] + in->p_values[rhs.first][rhs.second];
-    rhs_denst /= (in->i_weights[rhs.first]+in->i_weights[rhs.second]);
+    profit = pin->i_values[a] + pin->i_values[b] + pin->p_values[a][b];
+    for(int i = 0; i < pin->n; i++) {
+        profit += (i_knap[i] == this->k) * pin->p_values[i][a];
+        if(a != b)
+           profit += (i_knap[i] == this->k) * pin->p_values[i][b];
+    }
+    dnst = (double)profit / (pin->i_weights[a] + pin->i_weights[b]);
+}
 
-    return lhs_denst > rhs_denst;
+bool PairSorter::operator<(const PairSorter& rhs) const {
+    if(this->dnst == rhs.dnst) {
+        if(this->profit == rhs.profit) {
+            return this->k > rhs.k;
+        }
+        return this->profit < rhs.profit;
+    }
+    return this->dnst < rhs.dnst;
 }
