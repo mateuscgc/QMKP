@@ -41,7 +41,8 @@ int main() {
     cout << "                    <th>m</th>" << endl;
     cout << "                    <th>I</th>" << endl;
     cout << "                    <th>c</th>" << endl;
-    cout << "                    <th>Best</th>" << endl;
+    cout << "                    <th>Construct</th>" << endl;
+    cout << "                    <th>Local Search</th>" << endl;
     cout << "                </tr>" << endl;
     cout << "            </thead>" << endl;
     cout << "            <tbody>" << endl;
@@ -75,15 +76,20 @@ int main() {
                     cout << "                    <td rowspan=\" " << num_k[ki]+1 << " \">" << num_k[ki] << "</td>" << endl;
                     cout << "                    <td rowspan=\" " << num_k[ki]+1 << " \">" << i << "</td>" << endl;
                     cout << "                    <td rowspan=\" " << num_k[ki]+1 << " \">" << in.k_caps[0] << "</td>" << endl;
+                    cout << "                    <td>" << s.k_values_construct[0] << "</td>" << endl;
                     cout << "                    <td>" << s.k_values[0] << "</td>" << endl;
                     cout << "                </tr>" << endl;
 
-                    long long sum = s.k_values[0];
                     for(int k = 1; k < in.k; k++) {
-                        cout << "                    <tr><td>" << s.k_values[k] << "</td></tr>" << endl;
-                        sum += s.k_values[k];
+                        cout << "                   <tr>" << endl;
+                        cout << "                       <td>" << s.k_values_construct[k] << "</td>" << endl;
+                        cout << "                       <td>" << s.k_values[k] << "</td>" << endl;
+                        cout << "                   </tr>" << endl;
                     }
-                    cout << "                    <tr><td><b>" << sum << "</b></td></tr>" << endl;
+                    cout << "                   <tr>" << endl;
+                    cout << "                       <td><b>" << s.construct_solution << "</b></td>" << endl;
+                    cout << "                       <td><b>" << s.local_search_solution << "</b></td>" << endl;
+                    cout << "                   </tr>" << endl;
                 }
             }
         }

@@ -2,6 +2,7 @@
 
 Output::Output(const Input* pin):in(pin) {
     k_values.resize(in->k, 0);
+    k_values_construct.resize(in->k, 0);
 }
 
 //! Sobrecarda de operador

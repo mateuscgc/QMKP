@@ -16,6 +16,9 @@ public:
     const Input *in;
 
     vector<int> k_values;
+    vector<int> k_values_construct;
+    int construct_solution;
+    int local_search_solution;
 
     friend ostream& operator<<(ostream&, const Output &);
 };
