@@ -1,0 +1,14 @@
+Tempo 2.90303 Num of local search iterations 175
+Construt phase solution 11880
+1072
+644
+675
+1557
+1492
+554
+762
+787
+1680
+304
+Final solution 11917
+

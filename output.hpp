@@ -18,7 +18,11 @@ public:
     vector<int> k_values;
     vector<int> k_values_construct;
     int construct_solution;
-    int local_search_solution;
+    double elapsed_secs;
+    clock_t begin;
+    int num_lc;
+    int best_solution;
+    double total_time;
 
     friend ostream& operator<<(ostream&, const Output &);
 };

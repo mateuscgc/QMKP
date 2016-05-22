@@ -27,6 +27,7 @@ class Input {
         vector<vector<int>> p_values;
         int k;
         vector<int> k_caps;
+        double time_limit;
 
 };
 
