@@ -61,7 +61,7 @@ public:
     int trial_solution;
     int best_local_search_solution;
     // int no_improv_iter = 0;
-    stack < pair < int, int > > moves;
+    stack < pair < double, int > > moves;
 };
 
 #endif

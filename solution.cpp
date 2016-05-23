@@ -1,7 +1,8 @@
 #include "solution.hpp"
 
 Solution::Solution(const Input* pin):Output(pin) {
-    srand(time(NULL));
+    // srand(time(NULL));
+    srand(1);
     k_curr_caps.resize(in->k, 0);
     for(int i = 0; i < in->k; i++)
         k_curr_caps[i] = in->k_caps[i];
@@ -38,11 +39,7 @@ int Solution::add_item(int item, int knap)   {
 }
 
 void Solution::add_pair(int a, int b, int k) {
-    // Mochila atual dos dois itens do par
-    int f_knap = i_knap[a];
-    int s_knap = i_knap[b];
-
-    if (f_knap == -1 && s_knap == -1) { // Caso nenhum dos dois itens esteja em mochila
+    if (i_knap[a] == -1 && i_knap[b] == -1) { // Caso nenhum dos dois itens esteja em mochila
         if (k_curr_caps[k] >= in->i_weights[a] + in->i_weights[b]) {
             add_item(a, k);
             add_item(b, k);
@@ -202,17 +199,17 @@ void Solution::swap_move(int i1, int i2) {
 }
 
 void Solution::restore_current_solution(int item, int first_knap) {
-    pair<int, int> next;
+    pair<double, int> next;
     while(!moves.empty()) {
         next = moves.top();
         moves.pop();
 
-        if (next.first < 0) { // Se foi um movimento de shift
-            next.first *= -1;
+        if (fmod(next.first, 1) == 0) { // Se foi um movimento de shift
             remove_item(next.first);
             if(next.second > -1)
                 add_item(next.first, next.second);
         } else { // Se foi um movimento de swap
+            next.first = (int)next.first;
             swap_move(next.first, next.second);
         }
 
@@ -230,13 +227,13 @@ int Solution::local_search(int last) {
         // cout << endl << "==> Current Solution " << current_solution << endl;
         // int fre = get_heaviest_assigned_item();
         int fre = i;
-        if(fre > -1 && i_knap[fre] > -1) {
+        if(i_knap[fre] > -1) {
             int free_origin_knap = i_knap[fre];
             int last_free_knap = free_origin_knap;
             remove_item(fre);
             // cout << "Reference Solution after first removal (" << fre << ") " << reference_solution << endl;
 
-            stack< pair <int, int> > empty;
+            stack< pair <double, int> > empty;
             swap(moves, empty); // Clear stack;
 
             // int lower_finder, upper_finder;
@@ -258,7 +255,7 @@ int Solution::local_search(int last) {
                     // cout << "Knap " << last_free_knap <<  " Shift item " << item_to_shift << endl;
 
                     if(item_to_shift > -1) {
-                        moves.push({-item_to_shift, i_knap[item_to_shift]});
+                        moves.push({item_to_shift, i_knap[item_to_shift]});
                         aux = i_knap[item_to_shift];
                         remove_item(item_to_shift);
                         add_item(item_to_shift, last_free_knap);
@@ -276,7 +273,7 @@ int Solution::local_search(int last) {
                     // cout << "===> Swap move " << items_to_swap.first << " " << items_to_swap.second << endl;
 
                     if(items_to_swap.first > -1) { // Se tem swap
-                        moves.push({items_to_swap.first, items_to_swap.second});
+                        moves.push({items_to_swap.first + 0.1, items_to_swap.second});
                         swap_move(items_to_swap.first, items_to_swap.second);
                     }
                 }
@@ -334,7 +331,6 @@ void Solution::solve() {
     // cout << "Construct Fase solution " << current_solution << endl;
 
     // no_improv_iter = 0;
-    // int aux = 100;
     int last = 0;
     num_lc = 0;
     while (double(clock() - begin) / CLOCKS_PER_SEC < in->time_limit) {
@@ -364,7 +360,7 @@ void Solution::solve() {
             // cout << "Perturbation improved best solution!!" << endl;
         }
     }
-    total_time = double(clock() - begin) / CLOCKS_PER_SEC;
+    // total_time = double(clock() - begin) / CLOCKS_PER_SEC;
     // cout << "NUMBER OF LOCAL SEARCH ITERATIONS " << num_lc << endl;
 
     // cout << "BEST SOLUTION " << best_solution << endl;
