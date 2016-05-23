@@ -16,6 +16,13 @@ public:
     const Input *in;
 
     vector<int> k_values;
+    vector<int> k_values_construct;
+    int construct_solution;
+    double elapsed_secs;
+    clock_t begin;
+    int num_lc;
+    int best_solution;
+    double total_time;
 
     friend ostream& operator<<(ostream&, const Output &);
 };

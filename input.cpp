@@ -44,5 +44,7 @@ void Input::load(const string& file_name) {
         for(int i = 0; i < n; i++) {
             inputFile >> i_weights[i];
         }
+
+        inputFile >> time_limit;
     }
 }

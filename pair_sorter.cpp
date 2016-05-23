@@ -13,7 +13,9 @@ PairSorter::PairSorter(const Input* pin, int a, int b, int k, const vector<int>&
     this->b = b; // item
     this->k = k; // mochila
 
-    profit = pin->i_values[a] + pin->i_values[b] + pin->p_values[a][b];
+    profit = pin->i_values[a];
+    if(a != b)
+        profit += pin->i_values[b] + pin->p_values[a][b];
     for(int i = 0; i < pin->n; i++) {
         profit += (i_knap[i] == this->k) * pin->p_values[i][a];
         if(a != b)
