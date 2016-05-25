@@ -41,17 +41,10 @@ public:
     void adaptive_perturbation();
     void random_remove(int num_of_removals);
 
-
-    // struct Move {
-    //     int item;
-    //     int ori;
-    //     int dest;
-    //     Move(int i, o, d) {
-    //         item = i;
-    //         ori = o;
-    //         dest = d;
-    //     }
-    // };
+    void convert_solution(int k, const vector<int>& knap_itens);
+    int get_dp_assignment_profit(int item, const vector<int>& knap_itens);
+    void dp_knap_fill(int k);
+    void dp_construct_phase();
 
     priority_queue<PairSorter> p_list;
     vector<int> k_curr_caps;
@@ -62,6 +55,9 @@ public:
     int best_local_search_solution;
     // int no_improv_iter = 0;
     stack < pair < double, int > > moves;
+
+    vector< vector <int> > b;
+    vector<int> dp;
 };
 
 #endif

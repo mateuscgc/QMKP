@@ -72,6 +72,57 @@ void Solution::construct_phase() {
     }
 }
 
+// ############# DP Construction method #############
+void Solution::convert_solution(int k, const vector<int>& knap_itens) {
+    int knap_itens_number = knap_itens.size();
+    for(int i = 0; i < knap_itens_number; i++) {
+        add_item(knap_itens[i], k);
+    }
+}
+
+int Solution::get_dp_assignment_profit(int item, const vector<int>& knap_itens) {
+    int profit = in->i_values[item];
+    int knap_itens_number = knap_itens.size();
+    for(int i = 0; i < knap_itens_number; i++) {
+        profit += in->p_values[item][knap_itens[i]];
+    }
+    return profit;
+}
+
+void Solution::dp_knap_fill(int k) {
+    for(int i = 0; i < in->n; i++) if(i_knap[i] == -1) {
+        for(int c = in->k_caps[k]; c >= 0; c--) {
+            if(dp[c] > -1 && c + in->i_weights[i] <= in->k_caps[k]) {
+                int knap_profit = dp[c] + get_dp_assignment_profit(i, b[c]);
+                if(knap_profit > dp[c+in->i_weights[i]]) {
+                    dp[c+in->i_weights[i]] = knap_profit;
+                    b[c+in->i_weights[i]] = b[c];
+                    b[c+in->i_weights[i]].push_back(i);
+                }
+            }
+        }
+    }
+    int max = 0;
+    for(int c = 1; c <= in->k_caps[k]; c++)
+        if(dp[c] > dp[max])
+            max = c;
+
+    convert_solution(k, b[max]);
+}
+
+void Solution::dp_construct_phase() {
+    for(int k = 0; k < in->k; k++) {
+        dp.clear();
+        dp.resize(in->k_caps[k]+1, -1);
+        dp[0] = 0;
+        b.clear();
+        b.resize(in->k_caps[k]+1, vector<int>(0));
+
+        dp_knap_fill(k);
+    }
+}
+// ##################################################
+
 int Solution::evaluate_solution() {
     int ans = 0;
     for(int k = 0; k < in->k; k++) {
@@ -320,7 +371,7 @@ void Solution::solve() {
     begin = clock();
 
     reference_solution = 0;
-    construct_phase();
+    dp_construct_phase();
     current_solution = reference_solution;
     construct_solution = current_solution;
     best_local_search_solution = current_solution;
