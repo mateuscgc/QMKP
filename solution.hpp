@@ -46,6 +46,9 @@ public:
     void dp_knap_fill(int k);
     void dp_construct_phase();
 
+    void hiley_construct();
+    void update_pq_2(int k);
+
     priority_queue<PairSorter> p_list;
     vector<int> k_curr_caps;
     vector<int> i_knap;
