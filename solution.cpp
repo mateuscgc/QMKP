@@ -1,8 +1,8 @@
 #include "solution.hpp"
 
 Solution::Solution(const Input* pin):Output(pin) {
-    // srand(time(NULL));
-    srand(1);
+    srand(time(NULL));
+    // srand(1);
     k_curr_caps.resize(in->k, 0);
     for(int i = 0; i < in->k; i++)
         k_curr_caps[i] = in->k_caps[i];
@@ -16,6 +16,15 @@ void Solution::update_pq(int k) {
                 PairSorter aux(in, i, j, k, i_knap);
                 p_list.push(aux);
             }
+        }
+    }
+}
+
+void Solution::update_pq_2(int k) {
+    for(int i = 0; i < in->n; i++) {
+        if(i_knap[i] == -1) {
+            PairSorter aux(in, i, i, k, i_knap);
+            p_list.push(aux);
         }
     }
 }
@@ -62,6 +71,78 @@ void Solution::construct_phase() {
     }
 
     PairSorter aux;
+    PairSorter next;
+    while(!p_list.empty()) {
+
+        next = p_list.top();
+        p_list.pop();
+
+        add_pair(next.a, next.b, next.k);
+    }
+}
+
+// ############# DP Construction method #############
+void Solution::convert_solution(int k, const vector<int>& knap_itens) {
+    int knap_itens_number = knap_itens.size();
+    for(int i = 0; i < knap_itens_number; i++) {
+        add_item(knap_itens[i], k);
+    }
+}
+
+int Solution::get_dp_assignment_profit(int item, const vector<int>& knap_itens) {
+    int profit = in->i_values[item];
+    int knap_itens_number = knap_itens.size();
+    for(int i = 0; i < knap_itens_number; i++) {
+        profit += in->p_values[item][knap_itens[i]];
+    }
+    return profit;
+}
+
+void Solution::dp_knap_fill(int k) {
+    for(int i = 0; i < in->n; i++) if(i_knap[i] == -1) {
+        for(int c = in->k_caps[k]; c >= 0; c--) {
+            if(dp[c] > -1 && c + in->i_weights[i] <= in->k_caps[k]) {
+                int knap_profit = dp[c] + get_dp_assignment_profit(i, b[c]);
+                if(knap_profit > dp[c+in->i_weights[i]]) {
+                    dp[c+in->i_weights[i]] = knap_profit;
+                    b[c+in->i_weights[i]] = b[c];
+                    b[c+in->i_weights[i]].push_back(i);
+                }
+            }
+        }
+    }
+    int max = 0;
+    for(int c = 1; c <= in->k_caps[k]; c++)
+        if(dp[c] > dp[max])
+            max = c;
+
+    convert_solution(k, b[max]);
+}
+
+void Solution::dp_construct_phase() {
+    for(int k = 0; k < in->k; k++) {
+        dp.clear();
+        dp.resize(in->k_caps[k]+1, -1);
+        dp[0] = 0;
+        b.clear();
+        b.resize(in->k_caps[k]+1, vector<int>(0));
+
+        dp_knap_fill(k);
+    }
+}
+// ##################################################
+
+// ############# Hiley and Julstron Construction #############
+void Solution::hiley_construct() {
+    for(int i = 0; i < in->n; i++) {
+        for(int k = 0; k < in->k; k++) {
+            if(i_knap[i] == -1) {
+                PairSorter aux(in, i, i, k, i_knap);
+                p_list.push(aux);
+            }
+        }
+    }
+
     PairSorter next;
     while(!p_list.empty()) {
 
@@ -227,6 +308,7 @@ int Solution::local_search(int last) {
         // cout << endl << "==> Current Solution " << current_solution << endl;
         // int fre = get_heaviest_assigned_item();
         int fre = i;
+        double moviment_choice = (double) rand() / (RAND_MAX);
         if(i_knap[fre] > -1) {
             int free_origin_knap = i_knap[fre];
             int last_free_knap = free_origin_knap;
@@ -236,7 +318,7 @@ int Solution::local_search(int last) {
             stack< pair <double, int> > empty;
             swap(moves, empty); // Clear stack;
 
-            // int lower_finder, upper_finder;
+            int lower_finder, upper_finder;
             for(int j = 0; j < CL; j++) {
                 trial_solution = reference_solution;
                 if(reassign_item(fre, free_origin_knap)) {
@@ -250,7 +332,7 @@ int Solution::local_search(int last) {
                     remove_item(fre);
                     // cout << "Current solution not improved, item removed " << reference_solution << endl;
                 }
-                if (((double) rand() / (RAND_MAX)) <= (double)4/5) { // Greedy shift move
+                if (moviment_choice <= (double)3/5) { // Greedy shift move
                     item_to_shift = get_best_shift_move(last_free_knap, fre, item_to_shift);
                     // cout << "Knap " << last_free_knap <<  " Shift item " << item_to_shift << endl;
 
@@ -268,6 +350,18 @@ int Solution::local_search(int last) {
                             }
                         }
                     }
+                } else if (moviment_choice <= (double)4/5) { // Random shift move
+                    item_to_shift = -1;
+                    lower_finder = rand() % in->n; // Randomize number in items range
+                    upper_finder = lower_finder;
+                    while(item_to_shift == -1 && (upper_finder < in->n || lower_finder >= 0)) { // find first valid item for shift
+                        if(lower_finder >= 0 && lower_finder != fre && k_curr_caps[free_origin_knap] > in->i_weights[lower_finder])
+                            item_to_shift = lower_finder;
+                        else if(upper_finder < in->n && upper_finder != fre && k_curr_caps[free_origin_knap] > in->i_weights[upper_finder])
+                            item_to_shift = upper_finder;
+                        lower_finder--;
+                        upper_finder++;
+                    }
                 } else { // Greedy swap move
                     get_best_swap_move(fre, items_to_swap.first, items_to_swap.second);
                     // cout << "===> Swap move " << items_to_swap.first << " " << items_to_swap.second << endl;
@@ -277,19 +371,6 @@ int Solution::local_search(int last) {
                         swap_move(items_to_swap.first, items_to_swap.second);
                     }
                 }
-                // } else { // Random shift move
-                //     item_to_shift = -1;
-                //     lower_finder = rand() % in->n; // Randomize number in items range
-                //     upper_finder = lower_finder;
-                //     while(item_to_shift == -1 && (upper_finder < in->n || lower_finder >= 0)) { // find first valid item for shift
-                //         if(lower_finder >= 0 && lower_finder != fre && k_curr_caps[free_origin_knap] > in->i_weights[lower_finder])
-                //             item_to_shift = lower_finder;
-                //         else if(upper_finder < in->n && upper_finder != fre && k_curr_caps[free_origin_knap] > in->i_weights[upper_finder])
-                //             item_to_shift = upper_finder;
-                //         lower_finder--;
-                //         upper_finder++;
-                //     }
-                // }
 
                 // cout << "Reference solution after shift / swap move " << reference_solution << endl;
             }
@@ -321,6 +402,7 @@ void Solution::solve() {
 
     reference_solution = 0;
     construct_phase();
+    // hiley_construct();
     current_solution = reference_solution;
     construct_solution = current_solution;
     best_local_search_solution = current_solution;
